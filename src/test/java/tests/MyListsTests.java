@@ -1,10 +1,8 @@
 package tests;
 
 import lib.CoreTestCase;
-import lib.ui.ArticlePageObject;
-import lib.ui.MyListsPageObject;
-import lib.ui.NavigationUI;
-import lib.ui.SearchPageObject;
+import lib.Platform;
+import lib.ui.*;
 import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.MyListsPageObjectFactory;
 import lib.ui.factories.NavigationUIFactory;
@@ -14,6 +12,9 @@ import org.junit.Test;
 public class MyListsTests extends CoreTestCase
 {
     private static final String name_of_folder = "Learning programming";
+    private static final String
+        login = "mashagrsh",
+        password = "E07M15LOveeeWiki";
 
     @Test
     public void testsSaveFirstArticleInMyList()
@@ -27,10 +28,29 @@ public class MyListsTests extends CoreTestCase
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.waitForTitleElement();
         String article_title = ArticlePageObject.getArticleTitle();
-        ArticlePageObject.addArticleToMyNewList(name_of_folder);
+        if (Platform.getInstance().isAndroid()){
+            ArticlePageObject.addArticleToMyNewList(name_of_folder);
+        } else {
+            ArticlePageObject.addArticlesToMySaved();
+        }
+        if (Platform.getInstance().isMW()){
+            AuthorizationPageObject Auth = new AuthorizationPageObject(driver);
+            Auth.clickAuthButton();
+            Auth.enterLoginData(login, password);
+            Auth.submitForm();
+
+            ArticlePageObject.waitForTitleElement();
+
+            assertEquals("We are not on the same page after login",
+                    article_title,
+                    ArticlePageObject.getArticleTitle());
+
+            ArticlePageObject.addArticleToMyOldList();
+        }
         ArticlePageObject.closeArticle();
 
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
+        NavigationUI.openNavigation();
         NavigationUI.clickMyLists();
 
         MyListsPageObject MyListsPageObject = MyListsPageObjectFactory.get(driver);
