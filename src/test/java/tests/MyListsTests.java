@@ -44,8 +44,6 @@ public class MyListsTests extends CoreTestCase
             assertEquals("We are not on the same page after login",
                     article_title,
                     ArticlePageObject.getArticleTitle());
-
-            ArticlePageObject.addArticleToMyOldList();
         }
         ArticlePageObject.closeArticle();
 

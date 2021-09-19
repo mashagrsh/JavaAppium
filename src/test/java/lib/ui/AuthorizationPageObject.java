@@ -17,7 +17,7 @@ public class AuthorizationPageObject extends MainPageObject
 
     public void clickAuthButton()
     {
-        this.waitForElementPresent(LOGIN_BUTTON, "There is no login button", 5);
+        this.waitForElementPresent(LOGIN_BUTTON, "There is no login button", 20);
         this.waitForElementAndClick(LOGIN_BUTTON, "There is no login input for clicking", 5);
     }
 
